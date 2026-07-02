@@ -4,6 +4,20 @@
  * ==========================================================================
  */
 
+/* Page layout */
+.forecast-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.forecast-page--empty {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* Headcount stepper */
 .headcount-btn {
   width: 20px;

@@ -37,6 +37,13 @@
   color: var(--color-text-muted);
   margin-bottom: var(--spacing-4);
   opacity: 0.5;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-state__icon > * {
+  font-size: inherit;
 }
 
 /**
