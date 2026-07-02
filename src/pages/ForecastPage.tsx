@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAppStore } from '@/store/useAppStore'
+import { EmptyState } from '@/components/EmptyState'
 import { ScenarioCard } from '@/components/ScenarioCard'
 import { ChartCard } from '@/components/charts/ChartCard'
 import { ThroughputChart } from '@/components/charts/ThroughputChart'
@@ -20,6 +22,7 @@ export function ForecastPage() {
   const selectedSprint = useAppStore((s) => s.selectedSprint)
   const selectedTeams = useAppStore((s) => s.selectedTeams)
   const unlockedSecrets = useAppStore((s) => s.unlockedSecrets)
+  const navigate = useNavigate()
 
   const [metricType, setMetricType] = useState<'throughput' | 'storyPoints'>('throughput')
   const [excludedContributors, setExcludedContributors] = useState<string[]>([])
@@ -56,20 +59,29 @@ export function ForecastPage() {
 
   if (!csvLoaded) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
-        <span className="material-symbols-outlined text-5xl text-ink-mute mb-4">upload_file</span>
-        <h2 className="h-section mb-2">Aucune donnée</h2>
-        <p className="dek">Importez vos CSV depuis la page Admin.</p>
+      <div className="forecast-page forecast-page--empty">
+        <EmptyState
+          icon={<span className="material-symbols-outlined">upload_file</span>}
+          title="Aucune donnée"
+          description="Importez vos fichiers CSV depuis la page Préparation."
+          actionLabel="Aller à la préparation"
+          onAction={() => navigate('/admin')}
+        />
       </div>
     )
   }
 
   if (!forecastData || !forecastData.isValid) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
-        <span className="material-symbols-outlined text-5xl text-ink-mute mb-4">analytics</span>
-        <h2 className="h-section mb-2">Forecast indisponible</h2>
-        <p className="dek">{forecastData?.error || 'Données insuffisantes pour la simulation Monte Carlo.'}</p>
+      <div className="forecast-page forecast-page--empty">
+        <EmptyState
+          icon={<span className="material-symbols-outlined">analytics</span>}
+          title="Forecast indisponible"
+          description={forecastData?.error || 'Données insuffisantes pour la simulation Monte Carlo.'}
+          actionLabel="Aller à la préparation"
+          onAction={() => navigate('/admin')}
+          variant="error"
+        />
       </div>
     )
   }

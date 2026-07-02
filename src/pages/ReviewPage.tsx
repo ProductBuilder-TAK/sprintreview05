@@ -6,6 +6,7 @@ import { useState, useCallback, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppStore } from '@/store/useAppStore'
 import { KpiGrid } from '@/components/kpi/KpiGrid'
+import { EmptyState } from '@/components/EmptyState'
 import { ThroughputKpi, CycleTimeKpi, BugsKpi, MidSprintKpi, MttrKpi, CfrKpi } from '@/components/kpi/KpiCards'
 import { SpCompletionBlock } from '@/components/kpi/SpCompletionBlock'
 import { GoalItem, GoalInput } from '@/components/GoalItem'
@@ -44,18 +45,17 @@ export function ReviewPage() {
     setGoals((prev) => prev.map((g, i) => (i === index ? { ...g, status } : g)))
   }, [])
 
-  // Empty state — same as vanilla
+  // Empty state — shared component
   if (!csvLoaded || !sprintMetrics) {
     return (
       <div className="review-page review-page--empty">
-        <div className="empty-state">
-          <div className="empty-state__icon">📊</div>
-          <h3 className="empty-state__title">Pas encore de données</h3>
-          <p className="empty-state__text">Commencez par charger vos fichiers CSV.</p>
-          <button className="btn--editorial" onClick={() => navigate('/admin')}>
-            Aller à la préparation
-          </button>
-        </div>
+        <EmptyState
+          icon="📊"
+          title="Pas encore de données"
+          description="Commencez par charger vos fichiers CSV."
+          actionLabel="Aller à la préparation"
+          onAction={() => navigate('/admin')}
+        />
       </div>
     )
   }
